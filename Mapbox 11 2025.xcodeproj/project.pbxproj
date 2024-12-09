@@ -6,6 +6,11 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		EC1850FF2D07AD0400689FB3 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = EC1850FE2D07AD0400689FB3 /* SQLite */; };
+		EC1851022D07AD5100689FB3 /* MapboxMaps in Frameworks */ = {isa = PBXBuildFile; productRef = EC1851012D07AD5100689FB3 /* MapboxMaps */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		EC1850EC2D07ACC100689FB3 /* Mapbox 11 2025.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mapbox 11 2025.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -23,6 +28,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC1851022D07AD5100689FB3 /* MapboxMaps in Frameworks */,
+				EC1850FF2D07AD0400689FB3 /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +72,8 @@
 			);
 			name = "Mapbox 11 2025";
 			packageProductDependencies = (
+				EC1850FE2D07AD0400689FB3 /* SQLite */,
+				EC1851012D07AD5100689FB3 /* MapboxMaps */,
 			);
 			productName = "Mapbox 11 2025";
 			productReference = EC1850EC2D07ACC100689FB3 /* Mapbox 11 2025.app */;
@@ -94,6 +103,10 @@
 			);
 			mainGroup = EC1850E32D07ACC100689FB3;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				EC1850FD2D07AD0400689FB3 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+				EC1851002D07AD5100689FB3 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = EC1850ED2D07ACC100689FB3 /* Products */;
 			projectDirPath = "";
@@ -324,6 +337,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		EC1850FD2D07AD0400689FB3 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.15.3;
+			};
+		};
+		EC1851002D07AD5100689FB3 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/mapbox/mapbox-maps-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.8.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		EC1850FE2D07AD0400689FB3 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1850FD2D07AD0400689FB3 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+		EC1851012D07AD5100689FB3 /* MapboxMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EC1851002D07AD5100689FB3 /* XCRemoteSwiftPackageReference "mapbox-maps-ios" */;
+			productName = MapboxMaps;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = EC1850E42D07ACC100689FB3 /* Project object */;
 }
