@@ -22,6 +22,28 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
             let tileURLTemplate = mapSource.tileURL!
             let components = url.pathComponents.suffix(3).map { Int($0)! }
             let tileID = TileID(z: components[0], x: components[1], y: components[2])
+            
+            //check if the tile exists offline
+            let mbtilesPath = MapDownloadService.shared.storageDirectory
+              .appendingPathComponent(key)
+              .appendingPathExtension("mbtiles")
+              .path
+
+            if let mbtiles = try? MBTiles.open(path: mbtilesPath) {
+                if let tile = mbtiles[z: tileID.z, x: tileID.x, y: tileID.y] {
+                    // the tile exists in the offline cache; construct a fake HTTP response
+                    // in order to hand the tile data back to Mapbox
+                    let headers = [
+                        "content-type": "application/x-protobuf",
+                        "content-encoding": "gzip",
+                    ]
+                    let data = HttpResponseData(headers: headers, code: 200, data: tile)
+                    let response = HttpResponse(identifier: 0, request: request, result: .success(data))
+                    continuation(HttpRequestOrResponse.fromHttpResponse(response))
+                }
+            }
+            
+            // not in offline storage; request from server
             url = tileURLTemplate.toURL(tile: tileID)
             
             let returnRequest = HttpRequest(method: request.method, url: url.absoluteString, headers: request.headers, timeout: request.timeout, networkRestriction: request.networkRestriction, sdkInformation: request.sdkInformation, body: request.body, flags: request.flags)
@@ -31,7 +53,6 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
         }
         
         //also test reading a tile from disk and then returning a fake request
-
     }
     
     
