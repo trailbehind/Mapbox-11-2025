@@ -51,8 +51,6 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
         } else {
             continuation(HttpRequestOrResponse.fromHttpRequest(request))
         }
-        
-        //also test reading a tile from disk and then returning a fake request
     }
     
     
