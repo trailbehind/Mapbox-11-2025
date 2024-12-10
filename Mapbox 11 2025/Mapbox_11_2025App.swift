@@ -11,7 +11,7 @@ import MapboxMaps
 @main
 struct Mapbox_11_2025App: App {
     init() {
-        let interceptor = CustomHttpService()
+        let interceptor = CustomHttpInterceptor()
         HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
     }
     
