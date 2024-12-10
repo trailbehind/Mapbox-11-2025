@@ -17,8 +17,8 @@ struct ContentView: View {
     var body: some View {
             let centerCoordinate = CLLocationCoordinate2D(latitude:  42.741971, longitude: -108.817711)
             Map(initialViewport: .camera(center: centerCoordinate, zoom: 14))
-            .mapStyle(.outdoors)
-                .ignoresSafeArea()
+            .mapStyle(MapStyle(uri: StyleURI(rawValue: style.rawValue)!))
+            .ignoresSafeArea()
         }
 }
 
