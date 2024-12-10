@@ -59,6 +59,8 @@ class MapDownloadTask: NSObject, ProgressReporting {
 
   private var queue: OperationQueue
   private var mbtiles: MBTiles
+    
+  private let mbtilesAccessQueue = DispatchQueue(label: "com.gaiagps.mbtilesQueue")
 
   init(url: TileURLTemplate, scheme: TileServiceScheme, destination: MBTiles, bounds: Bounds, zooms: ClosedRange<Int>) {
     self.queue = OperationQueue()
@@ -85,7 +87,12 @@ class MapDownloadTask: NSObject, ProgressReporting {
 
       let operation = DownloadOperation(session: URLSession.shared, request: request) { (data, response, error) in
         print("finished downloading \(url.absoluteString) - \(data!.count / 1024) kB")
-        self.mbtiles[z: tile.z, x: tile.x, y: tile.y] = data!
+
+
+          self.mbtilesAccessQueue.async {
+              self.mbtiles[z: tile.z, x: tile.x, y: tile.y] = data!
+          }
+
       }
 
       progress.addChild(operation.progress, withPendingUnitCount: 1)
