@@ -6,9 +6,16 @@
 //
 
 import SwiftUI
+import MapboxMaps
 
 @main
 struct Mapbox_11_2025App: App {
+    init() {
+        let interceptor = CustomHttpService()
+        HttpServiceFactory.setHttpServiceInterceptorForInterceptor(interceptor)
+    }
+    
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
