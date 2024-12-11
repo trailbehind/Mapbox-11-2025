@@ -40,6 +40,7 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
                     let data = HttpResponseData(headers: headers, code: 200, data: tile)
                     let response = HttpResponse(identifier: 0, request: request, result: .success(data))
                     continuation(HttpRequestOrResponse.fromHttpResponse(response))
+                    return
                 }
             }
             
