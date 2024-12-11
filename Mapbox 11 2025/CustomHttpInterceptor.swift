@@ -46,10 +46,14 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
             
             // not in offline storage; request from server
             url = tileURLTemplate.toURL(tile: tileID)
-            
+            print("Requested \(url)")
             let returnRequest = HttpRequest(method: request.method, url: url.absoluteString, headers: request.headers, timeout: request.timeout, networkRestriction: request.networkRestriction, sdkInformation: request.sdkInformation, body: request.body, flags: request.flags)
             continuation(HttpRequestOrResponse.fromHttpRequest(returnRequest))
         } else {
+            print("Not g:// requested: \(url)")
+            //This log statment is for troubleshooting errors like:
+            // The resource `g://contoursfeetz12/10/214/374` not found
+            // I see some URLs like https://static.gaiagps.com/GaiaTopoGL/glyphs/GaiaSquare_v3/0-255.pbf coming through here, but not su
             continuation(HttpRequestOrResponse.fromHttpRequest(request))
         }
     }
