@@ -6,11 +6,8 @@
 //
 
 import SwiftUI
+import MapboxMaps
 
-import SwiftUI
-@_spi(Experimental) import MapboxMaps
-
-@available(iOS 14.0, *)
 struct ContentView: View {
     @State private var style = Style.gaiaTopo
     @State private var currentDownloads: [MapDownloadTask] = []
