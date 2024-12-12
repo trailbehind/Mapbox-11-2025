@@ -16,7 +16,7 @@ class MapSourcesService {
   var sources: [String: MapSource] = [:]
 
   private init?() {
-    if let path = Bundle.main.path(forResource: "mapSourcesV2", ofType: "json") {
+    if let path = Bundle.main.path(forResource: "mapSources", ofType: "json") {
       do {
         let data = try Data(contentsOf: URL(fileURLWithPath: path), options: .mappedIfSafe)
         let sourcesFile = try JSONDecoder().decode(Self.MapSourcesFile, from: data)
