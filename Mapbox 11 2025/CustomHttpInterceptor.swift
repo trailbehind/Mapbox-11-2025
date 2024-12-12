@@ -60,7 +60,6 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
     
     
     func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
-        continuation(response)
     }
 }
     
