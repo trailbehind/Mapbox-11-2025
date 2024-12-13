@@ -45,7 +45,7 @@ struct ContentView: View {
 }
 
 enum Style: String {
-  case gaiaTopo = "https://static.gaiagps.com/GaiaTopoGL/v3/gaiatopo-feet.json"
+  case gaiaTopo = "https://static.gaiagps.com/GaiaTopoGL/v5/gaiatopo-feet.json"
   case gaiaWinter = "https://static.gaiagps.com/GaiaTopoGL/v3/gaiawinter-feet.json"
     case mapboxOutdoors = "mapbox://styles/mapbox/outdoors-v11"
 }

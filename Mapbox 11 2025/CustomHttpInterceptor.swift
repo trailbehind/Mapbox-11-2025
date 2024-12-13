@@ -60,6 +60,7 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
     
     
     func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
+        continuation(response) //without this continuation, the map foes not load contours in all areas
     }
 }
     
