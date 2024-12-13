@@ -44,10 +44,12 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
                 }
             }
             
+            // print("\(Date.now) Original \(url)")
+            
             // not in offline storage; request from server
-            url = tileURLTemplate.toURL(tile: tileID)
-            print("Requested \(url)")
-            let returnRequest = HttpRequest(method: request.method, url: url.absoluteString, headers: request.headers, timeout: request.timeout, networkRestriction: request.networkRestriction, sdkInformation: request.sdkInformation, body: request.body, flags: request.flags)
+            let newurl = tileURLTemplate.toURL(tile: tileID)
+            // print("\(Date.now) Requested \(newurl)")
+            let returnRequest = HttpRequest(method: request.method, url: newurl.absoluteString, headers: [:], timeout: request.timeout, networkRestriction: request.networkRestriction, sdkInformation: request.sdkInformation, body: request.body, flags: request.flags)
             continuation(HttpRequestOrResponse.fromHttpRequest(returnRequest))
         } else {
             print("Not g:// requested: \(url)")
@@ -60,6 +62,7 @@ class CustomHttpInterceptor: HttpServiceInterceptorInterface {
     
     
     func onResponse(for response: HttpResponse, continuation: @escaping HttpServiceInterceptorResponseContinuation) {
+        // print("\(Date.now) Received \(response.request.url)")
         continuation(response) //without this continuation, the map foes not load contours in all areas
     }
 }
