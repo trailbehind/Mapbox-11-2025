@@ -8,19 +8,29 @@
 import SwiftUI
 import MapboxMaps
 
-struct ContentView: View {
+struct MapView: View {
+    @ObservedObject var viewModel: MapViewModel
     @State private var style = Style.gaiaTopo
     @State private var currentDownloads: [MapDownloadTask] = []
-    let centerCoordinate = CLLocationCoordinate2D(latitude:  42.741971, longitude: -108.817711)
+    let centerCoordinate = CLLocationCoordinate2D(latitude: 46.86, longitude: -121.71)
     
     var body: some View {
         VStack {
-            Map(initialViewport: .camera(center: centerCoordinate, zoom: 14))
-                .mapStyle(MapStyle(uri: StyleURI(rawValue: style.rawValue)!))
-                .ignoresSafeArea()
+            MapReader { proxy in
+                Map(initialViewport: .camera(center: centerCoordinate, zoom: 14))
+                    .mapStyle(MapStyle(uri: StyleURI(rawValue: style.rawValue)!))
+                    .ignoresSafeArea()
+                    .onAppear {
+                        guard let map = proxy.map else { return }
+                        viewModel.mapboxMap = map
+                    }
+            }
             VStack {
               // Here's a demo of offline tile downloading. Currently the bounding box and list of
               // map sources is hardcoded here, but could also be selectable through the UI.
+                Button("Clear cache") {
+                    MapboxMap.clearData(completion: {_ in })
+                }
               Button("Download offline maps for Mount Rainier NP") {
                 for sourceID in ["gaiaosmv3", "contoursfeetz12", "landcover", "gaiashadedrelief"] {
                   let source = MapSourcesService.shared.sources[sourceID]!
@@ -51,5 +61,5 @@ enum Style: String {
 }
 
 #Preview {
-    ContentView()
+    MapView(viewModel: MapViewModel())
 }
