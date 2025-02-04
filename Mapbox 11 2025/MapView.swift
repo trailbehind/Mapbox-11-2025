@@ -9,7 +9,8 @@ import SwiftUI
 import MapboxMaps
 
 struct MapView: View {
-    @ObservedObject var viewModel: MapViewModel
+    @StateObject var viewModel: MapViewModel
+    @StateObject private var gridModel = GridModel()
     @State private var style = Style.gaiaTopo
     @State private var currentDownloads: [MapDownloadTask] = []
     let centerCoordinate = CLLocationCoordinate2D(latitude: 46.86, longitude: -121.71)
@@ -17,15 +18,44 @@ struct MapView: View {
     var body: some View {
         VStack {
             MapReader { proxy in
-                Map(initialViewport: .camera(center: centerCoordinate, zoom: 14))
+                Map(initialViewport: .camera(center: centerCoordinate, zoom: 14)) {
+                    if let options = gridModel.options {
+                        CustomGeometrySource(id: GridModel.customGeometryGridSource, options: options)
+                        LineLayer(id: "grid_layer", source: GridModel.customGeometryGridSource)
+                            .lineColor(.red)
+                        }
+                    }
                     .mapStyle(MapStyle(uri: StyleURI(rawValue: style.rawValue)!))
                     .ignoresSafeArea()
                     .onAppear {
                         guard let map = proxy.map else { return }
                         viewModel.mapboxMap = map
+                        gridModel.options = gridModel.makeCustomGeometrySourceOptions(for: map)
+
                     }
+                    .onChange(of: gridModel.gridSpacing) { _ in
+                        guard let map = proxy.map else { return }
+                        try? map.invalidateCustomGeometrySourceRegion(forSourceId: GridModel.customGeometryGridSource, bounds: .world)
+                                }
             }
             VStack {
+                VStack {
+                            Text("Grid Spacing: \(gridModel.gridSpacing, specifier: "%.2f")")
+                            Slider(value: $gridModel.gridSpacing, in: 0.01...10) {
+                                Text("Grid Spacing")
+                            } minimumValueLabel: {
+                                Image(systemName: "grid")
+                                    .font(.system(size: 12))
+                            } maximumValueLabel: {
+                                Image(systemName: "grid")
+                                    .font(.system(size: 24))
+                            }
+                        }
+                        .padding(10)
+//                        .floating(RoundedRectangle(cornerRadius: 10))
+//                        .limitPaneWidth()
+                
+                
               // Here's a demo of offline tile downloading. Currently the bounding box and list of
               // map sources is hardcoded here, but could also be selectable through the UI.
                 Button("Clear cache") {
