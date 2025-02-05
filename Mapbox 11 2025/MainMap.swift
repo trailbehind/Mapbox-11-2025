@@ -43,35 +43,6 @@ struct MainMap: View {
                         }
                     }
                     .padding(10)
-// ignore
-//            VStack {
-//               
-//                
-//                
-//              // Here's a demo of offline tile downloading. Currently the bounding box and list of
-//              // map sources is hardcoded here, but could also be selectable through the UI.
-//                Button("Clear cache") {
-//                    MapboxMap.clearData(completion: {_ in })
-//                }
-//              Button("Download offline maps for Mount Rainier NP") {
-//                for sourceID in ["gaiaosmv3", "contoursfeetz12", "landcover", "gaiashadedrelief"] {
-//                  let source = MapSourcesService.shared.sources[sourceID]!
-//                  let bounds = Bounds(west: -121.92, south: 46.72, east: -121.50, north: 47.00) // Mount Rainier National Park (approx)
-//                  let downloadTask = MapDownloadService.shared.downloadTask(source: source, bounds: bounds, zooms: 0...12)!
-//                  currentDownloads.append(downloadTask)
-//                }
-//              }
-//
-//              // Show progress bars for any tile downloads that are in progress
-//              if currentDownloads.count > 0 {
-//                VStack {
-//                  ForEach(currentDownloads, id: \.templateURL.rawValue) { download in
-//                      ProgressView(download.progress)
-//                  }
-//                }
-//              }
-//
-//            }
         }
     }
 }
