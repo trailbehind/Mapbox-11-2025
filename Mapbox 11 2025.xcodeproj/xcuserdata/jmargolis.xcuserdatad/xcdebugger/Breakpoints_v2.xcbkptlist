@@ -46,51 +46,5 @@
             stopOnStyle = "0">
          </BreakpointContent>
       </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "DFCB0AEC-B02A-4CFF-95FE-59EC4F04BE7B"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Mapbox 11 2025/CustomHttpInterceptor.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "42"
-            endingLineNumber = "42"
-            landmarkName = "onRequest(for:continuation:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "DFCB0AEC-B02A-4CFF-95FE-59EC4F04BE7B - 9be884e01f5151fc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Mapbox_11_2025.CustomHttpInterceptor.onRequest(for: __C.MBXHttpRequest, continuation: (__C.MBXHttpRequestOrResponse) -&gt; ()) -&gt; ()"
-                  moduleName = "Mapbox 11 2025.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jmargolis/Mapbox%2011%202025/Mapbox%2011%202025/CustomHttpInterceptor.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42">
-               </Location>
-               <Location
-                  uuid = "DFCB0AEC-B02A-4CFF-95FE-59EC4F04BE7B - 9be884e01f5151fc"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "Mapbox_11_2025.CustomHttpInterceptor.onRequest(for: __C.MBXHttpRequest, continuation: (__C.MBXHttpRequestOrResponse) -&gt; ()) -&gt; ()"
-                  moduleName = "Mapbox 11 2025.debug.dylib"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jmargolis/Mapbox%2011%202025/Mapbox%2011%202025/CustomHttpInterceptor.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "42"
-                  endingLineNumber = "42">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

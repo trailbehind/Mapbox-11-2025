@@ -18,7 +18,7 @@ struct Mapbox_11_2025App: App {
     
     var body: some Scene {
         WindowGroup {
-            MapView(viewModel: MapViewModel())
+            MainMap(viewModel: MainMapViewModel())
         }
     }
 }

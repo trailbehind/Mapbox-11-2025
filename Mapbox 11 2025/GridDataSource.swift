@@ -1,5 +1,5 @@
 //
-//  GridModel.swift
+//  GridDataSource.swift
 //  Mapbox 11 2025
 //
 //  Created by Jim Margolis on 2/3/25.
@@ -10,16 +10,41 @@ import SwiftUI
 import Combine
 import MapboxMaps
 
-class GridModel: ObservableObject {
+class GridDataSource: ObservableObject {
     @Published var gridSpacing: Double = 7
     @Published var options: CustomGeometrySourceOptions?
-    static let customGeometryGridSource = "custom-geo-grid"
+    static let gridSourceId = "custom-geo-grid"
+    static let gridLayerId = "grid_layer"
 
+    func configureGrid(on map: MapboxMap) {
+            guard let options = options else { return }
+            do {
+                // Remove the existing grid layer and source if they exist.
+                try? map.removeLayer(withId: Self.gridLayerId)
+                   try? map.removeSource(withId: Self.gridSourceId)
+                
+                // Create and add the custom geometry source.
+                let source = CustomGeometrySource(id: Self.gridSourceId, options: options)
+                try map.addSource(source)
+                
+                // Create the line layer for the grid.
+                var lineLayer = LineLayer(id: Self.gridLayerId, source: Self.gridSourceId)
+                // Depending on the API you might need to use a different method to set a constant color.
+                lineLayer.lineColor = .constant(StyleColor(.red))
+                
+                // Add the grid layer.
+                try map.addLayer(lineLayer)
+            } catch {
+                print("Error configuring grid: \(error)")
+            }
+        }
+    
     func makeCustomGeometrySourceOptions(for mapboxMap: MapboxMap) -> CustomGeometrySourceOptions {
         return CustomGeometrySourceOptions(
            fetchTileFunction: { [weak self] tileId in
-               guard let self else { return }
-
+               guard let self else {
+                   return
+               }
                let neighborTile = CanonicalTileID(z: tileId.z, x: tileId.x + 1, y: tileId.y + 1)
                let bounds = CoordinateBounds(
                    southwest: CLLocationCoordinate2D(latitude: neighborTile.latitude, longitude: tileId.longitude),
@@ -44,7 +69,7 @@ class GridModel: ObservableObject {
                    ])
                }
                try! mapboxMap.setCustomGeometrySourceTileData(
-                forSourceId: Self.customGeometryGridSource,
+                forSourceId: Self.gridSourceId,
                    tileId: tileId,
                    features: (latLines + lonLines).map(Feature.init)
                )
@@ -65,3 +90,5 @@ extension CanonicalTileID {
         return Double(x) / pow(2.0, Double(z)) * 360.0 - 180.0
     }
 }
+
+
