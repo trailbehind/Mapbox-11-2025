@@ -53,3 +53,7 @@ extension TileURLTemplate: Codable {
     try container.encode(rawValue)
   }
 }
+
+extension TileURLTemplate: Equatable {
+    
+}
