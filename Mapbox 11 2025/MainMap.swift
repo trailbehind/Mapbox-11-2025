@@ -19,12 +19,13 @@ struct MainMap: View {
             MapReader { proxy in
                 Map(initialViewport: .camera(center: centerCoordinate, zoom: 14))
                     .mapStyle(MapStyle(uri: StyleURI(rawValue: style.rawValue)!))
-                    .onStyleLoaded { _ in
+                    .onMapLoaded { _ in
                         guard let map = proxy.map else { return }
                         viewModel.mapboxMap = map
                         viewModel.setupMap()
                     }
                     .ignoresSafeArea()
+                //jmTODO: this needs to become onCameraChnaged and adapt the grid for different zoom levels, see DistanceGrid in the current project
                     .onChange(of: viewModel.gridDataSource.gridSpacing) { _ in
                         guard let map = proxy.map else { return }
                         try? map.invalidateCustomGeometrySourceRegion(forSourceId: GridDataSource.gridSourceId, bounds: .world)

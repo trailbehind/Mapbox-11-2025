@@ -11,12 +11,16 @@ import MapboxMaps
 class MainMapViewModel: ObservableObject {
     var mapboxMap: MapboxMap?
     @Published var gridDataSource = GridDataSource()
+    @Published var waypointDataSource = WaypointDataSource()
     
     func setupMap() {
            guard let map = mapboxMap else { return }
-           // Create options for the grid and then configure it.
+        waypointDataSource.options = waypointDataSource.makeCustomGeometrySourceOptions(for: map)
+        waypointDataSource.configureWaypointsLayer(on: map)
+        
            gridDataSource.options = gridDataSource.makeCustomGeometrySourceOptions(for: map)
            gridDataSource.configureGrid(on: map)
+        
        }
     
     func clearCache() {
