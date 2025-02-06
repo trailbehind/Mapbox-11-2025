@@ -66,12 +66,11 @@ class WaypointDataSource: ObservableObject {
             try? mapboxMap.removeLayer(withId: Self.layerId)
             try? mapboxMap.removeSource(withId: Self.sourceId)
             
-            // Create the custom geometry source with current options.
+            // configure new source and layer
             let options = makeCustomGeometrySourceOptions(for: mapboxMap)
             let source = CustomGeometrySource(id: Self.sourceId, options: options)
             try mapboxMap.addSource(source)
             
-            // Create and configure a symbol layer for waypoints.
             var symbolLayer = SymbolLayer(id: Self.layerId, source: Self.sourceId)
             symbolLayer.iconImage = .expression(Exp(.get) { "icon" })
             symbolLayer.iconAllowOverlap = .constant(true)
@@ -101,21 +100,7 @@ class WaypointDataSource: ObservableObject {
         return CustomGeometrySourceOptions(
             fetchTileFunction: { [weak self] tileID in
                 guard let self = self else { return }
-                
-    
-                var bounds = Math.boundsFromTile(tileID)
-                bounds = Math.bufferBounds(bounds: bounds, buffer: 1 / 256)
-                
-                var imagesToLoad = Set<String>()
-                let features: [Feature] = self.waypoints.compactMap { waypoint in
-                    if bounds.contains(latitude: waypoint.latitude, longitude: waypoint.longitude) {
-                        imagesToLoad.insert(waypoint.image)
-                        return Waypoint.waypointToFeature(waypoint: waypoint)
-                    } else {
-                        return nil
-                    }
-                }
-                self.loadImagesForCurrentTile(imageNames: imagesToLoad, mapboxMap: mapboxMap)
+                let features = getWaypointsForTile(tileID: tileID, for: mapboxMap)
                 try! mapboxMap.setCustomGeometrySourceTileData(
                     forSourceId: Self.sourceId,
                     tileId: tileID,
@@ -125,6 +110,30 @@ class WaypointDataSource: ObservableObject {
             cancelTileFunction: { _ in },
             tileOptions: tileOptions
         )
+    }
+    
+    func getWaypointsForTile(tileID: CanonicalTileID, for mapboxMap: MapboxMap) -> [Feature] {
+        let startTime = Date()
+        var imageNamesToLoad = Set<String>()
+        
+        let features: [Feature] = waypoints.compactMap { waypoint in
+            let tileBounds = Math.boundsFromTile(tileID)
+            
+            // In the current project, WaypointDataSource adds a buffer to the tile bounds like this:
+            // tileBounds = Math.bufferBounds(bounds: tileBounds, buffer: 1 / 256)
+            // but I think we can use TileOptions instead
+            if tileBounds.contains(latitude: waypoint.latitude, longitude: waypoint.longitude) {
+                imageNamesToLoad.insert(waypoint.image)
+                return Waypoint.waypointToFeature(waypoint: waypoint)
+            } else {
+                return nil
+            }
+        }
+        
+        loadImagesForCurrentTile(imageNames: imageNamesToLoad, mapboxMap: mapboxMap)
+        print("Got \(features.count) waypoints for tile z/x/y \(tileID.z)/\(tileID.x)/\(tileID.y) in \(fabs(startTime.timeIntervalSinceNow)) seconds")
+        return features
+   
     }
     
     
@@ -141,6 +150,7 @@ class WaypointDataSource: ObservableObject {
             do {
                 if !mapboxMap.imageExists(withId: name) {
                     try mapboxMap.addImage(image, id: name, sdf: false)
+                    print("Adding image \(name)")
                 }
             } catch {
                 print("Failed to add image \(name): \(error)")

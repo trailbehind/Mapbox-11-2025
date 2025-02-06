@@ -19,20 +19,16 @@ class GridDataSource: ObservableObject {
     func configureGrid(on map: MapboxMap) {
             guard let options = options else { return }
             do {
-                // Remove the existing grid layer and source if they exist.
+                // Remove existing layer/source if present.
                 try? map.removeLayer(withId: Self.gridLayerId)
-                   try? map.removeSource(withId: Self.gridSourceId)
-                
-                // Create and add the custom geometry source.
+                try? map.removeSource(withId: Self.gridSourceId)
+                // configure new source and layer
                 let source = CustomGeometrySource(id: Self.gridSourceId, options: options)
                 try map.addSource(source)
                 
-                // Create the line layer for the grid.
                 var lineLayer = LineLayer(id: Self.gridLayerId, source: Self.gridSourceId)
-                // Depending on the API you might need to use a different method to set a constant color.
-                lineLayer.lineColor = .constant(StyleColor(.red))
+                lineLayer.lineColor = .constant(StyleColor(.black))
                 
-                // Add the grid layer.
                 try map.addLayer(lineLayer)
             } catch {
                 print("Error configuring grid: \(error)")
