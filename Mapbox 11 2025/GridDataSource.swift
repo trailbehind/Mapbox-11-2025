@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import MapboxMaps
 
+//jmTODO: refactor this to change spacing based on zoom, see DistanceGrid.swift in current project
 class GridDataSource: ObservableObject {
     @Published var gridSpacing: Double = 7
     @Published var options: CustomGeometrySourceOptions?
