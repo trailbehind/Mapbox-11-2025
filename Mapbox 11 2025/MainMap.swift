@@ -25,7 +25,7 @@ struct MainMap: View {
                         viewModel.setupMap()
                     }
                     .ignoresSafeArea()
-                //jmTODO: this needs to become onCameraChnaged and adapt the grid for different zoom levels, see DistanceGrid in the current project
+                //jmTODO: this needs to become onCameraChanged and adapt the grid for different zoom levels, see DistanceGrid in the current project
                     .onChange(of: viewModel.gridDataSource.gridSpacing) { _ in
                         guard let map = proxy.map else { return }
                         try? map.invalidateCustomGeometrySourceRegion(forSourceId: GridDataSource.gridSourceId, bounds: .world)
