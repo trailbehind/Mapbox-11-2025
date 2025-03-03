@@ -11,14 +11,14 @@ import MapboxMaps
 struct MapView: View {
     @ObservedObject var viewModel: MapViewModel
     @State private var style = Style.gaiaTopo
-    @State private var currentDownloads: [MapDownloadTask] = []
+    
     let centerCoordinate = CLLocationCoordinate2D(latitude: 46.86, longitude: -121.71)
     
     var body: some View {
         VStack {
             MapReader { proxy in
                 Map(initialViewport: .camera(center: centerCoordinate, zoom: 14))
-                    .mapStyle(MapStyle(uri: StyleURI(rawValue: style.rawValue)!))
+                    .mapStyle(MapStyle(uri: StyleURI(rawValue: viewModel.mapStyle)!))
                     .ignoresSafeArea()
                     .onAppear {
                         guard let map = proxy.map else { return }
@@ -32,18 +32,17 @@ struct MapView: View {
                     MapboxMap.clearData(completion: {_ in })
                 }
               Button("Download offline maps for Mount Rainier NP") {
-                for sourceID in ["gaiaosmv3", "contoursfeetz12", "landcover", "gaiashadedrelief"] {
-                  let source = MapSourcesService.shared.sources[sourceID]!
-                  let bounds = Bounds(west: -121.92, south: 46.72, east: -121.50, north: 47.00) // Mount Rainier National Park (approx)
-                  let downloadTask = MapDownloadService.shared.downloadTask(source: source, bounds: bounds, zooms: 0...12)!
-                  currentDownloads.append(downloadTask)
-                }
+                  viewModel.downloadOfflineMaps()
               }
+                
+                Button("Layer maps") {
+                    viewModel.layerMaps()
+                }
 
               // Show progress bars for any tile downloads that are in progress
-              if currentDownloads.count > 0 {
+                if viewModel.currentDownloads.count > 0 {
                 VStack {
-                  ForEach(currentDownloads, id: \.templateURL.rawValue) { download in
+                    ForEach(viewModel.currentDownloads, id: \.templateURL.rawValue) { download in
                       ProgressView(download.progress)
                   }
                 }
